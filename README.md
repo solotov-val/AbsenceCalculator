@@ -37,4 +37,4 @@ Ausgabe:
 [MIT License](LICENSE)
 
 ## Kontakt
-Für Fragen und Anregungen können Sie [hier](https://github.com/solotov-val/AbsenceCalculator/issues)ein Issue eröffnen.
+Für Fragen und Anregungen können Sie [hier](https://github.com/solotov-val/AbsenceCalculator/issues) ein Issue eröffnen.
