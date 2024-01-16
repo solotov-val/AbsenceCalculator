@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta, date
+from prettytable import PrettyTable
 
 def daterange(start_date, end_date):
     """Erzeugt ein Datum für jeden Tag zwischen start_date und end_date."""
@@ -87,12 +88,15 @@ while True:
         verbleibende_abwesenheit, verbleibende_fehlstunden_gesamt, verbleibende_fehltage_gesamt = berechne_verbleibende_abwesenheit_gesamt(
             abwesenheitsrate, durchschnitt_stunden_pro_tag, gesamte_schultage)
 
-        print_in_color(f"Anzahl der Schultage bis heute: {schultage_bis_heute}", "blue")
-        print_in_color(f"Abwesenheitsrate: {abwesenheitsrate:.2f}%", "cyan")
-        print_in_color(f"Verbleibende Abwesenheit bis zum Limit von 25% für das gesamte Schuljahr: {verbleibende_abwesenheit:.2f}%", "green")
-        print_in_color(f"Verbleibende Fehlstunden bis zum Limit von 25% für das gesamte Schuljahr: {verbleibende_fehlstunden_gesamt:.2f} Stunden", "yellow")
-        print_in_color(f"Verbleibende Fehltage bis zum Limit von 25% für das gesamte Schuljahr: {verbleibende_fehltage_gesamt:.2f} Tage", "magenta")
+        # Tabelle erstellen
+        tabelle = PrettyTable()
+        tabelle.field_names = ["Kategorie", "Wert"]
+        tabelle.add_row(["Anzahl der Schultage bis heute", schultage_bis_heute])
+        tabelle.add_row(["Abwesenheitsrate", f"{abwesenheitsrate:.2f}%"])
+        tabelle.add_row(["Verbleibende Abwesenheit bis 25% (gesamtes Schuljahr)", f"{verbleibende_abwesenheit:.2f}%"])
+        tabelle.add_row(["Verbleibende Fehlstunden bis 25% (gesamtes Schuljahr)", f"{verbleibende_fehlstunden_gesamt:.2f} Stunden"])
+        tabelle.add_row(["Verbleibende Fehltage bis 25% (gesamtes Schuljahr)", f"{verbleibende_fehltage_gesamt:.2f} Tage"])
+
+        print(tabelle)
     except ValueError:
-        print_in_color("Ungültige Eingabe. Bitte geben Sie eine Zahl oder 'exit' ein.", "red")
-
-
+        print("Ungültige Eingabe. Bitte geben Sie eine Zahl oder 'exit' ein.")
