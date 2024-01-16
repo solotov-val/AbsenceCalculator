@@ -48,13 +48,21 @@ enddatum = date(2024, 6, 14)
 stunden_pro_wochentag = {"Montag": 8, "Dienstag": 6, "Mittwoch": 9, "Donnerstag": 6, "Freitag": 6}
 durchschnitt_stunden_pro_tag = sum(stunden_pro_wochentag.values()) / len(stunden_pro_wochentag)
 
-# Anzahl der Schultage bis heute berechnen, unter Berücksichtigung der Ferien
-schultage_bis_heute = berechne_schultage_bis_heute(startdatum, enddatum, ferientage)
+# Interaktive Eingabe von Fehlstunden
+while True:
+    fehlstunden_input = input("Geben Sie die Anzahl der Fehlstunden ein (oder 'exit' zum Beenden): ")
+    if fehlstunden_input.lower() == 'exit':
+        break
+    try:
+        fehlstunden = float(fehlstunden_input)
+        # Anzahl der Schultage bis heute berechnen, unter Berücksichtigung der Ferien
+        schultage_bis_heute = berechne_schultage_bis_heute(startdatum, enddatum, ferientage)
+        # Abwesenheitsrate berechnen
+        abwesenheitsrate = berechne_abwesenheit_bis_heute(fehlstunden, schultage_bis_heute, durchschnitt_stunden_pro_tag)
+        # Ergebnisse ausgeben
+        print(f"Anzahl der Schultage bis heute: {schultage_bis_heute}")
+        print(f"Abwesenheitsrate: {abwesenheitsrate:.2f}%")
+        print("Hinweis: Eine Fehlerquote von etwa 0.5% ist möglich.")
+    except ValueError:
+        print("Ungültige Eingabe. Bitte geben Sie eine Zahl oder 'exit' ein.")
 
-# Beispiel: 74 Fehlstunden
-fehlstunden = 81 # Beispielwert
-abwesenheitsrate = berechne_abwesenheit_bis_heute(fehlstunden, schultage_bis_heute, durchschnitt_stunden_pro_tag)
-
-#Ergebnisse ausgeben
-print(f"Anzahl der Schultage bis heute: {schultage_bis_heute}")
-print(f"Abwesenheitsrate: {abwesenheitsrate:.2f}%")
