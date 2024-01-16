@@ -93,7 +93,7 @@ while True:
         tabelle.field_names = ["Kategorie", "Wert"]
         tabelle.add_row(["Anzahl der Schultage bis heute", schultage_bis_heute])
         tabelle.add_row(["Abwesenheitsrate", f"{abwesenheitsrate:.2f}%"])
-        tabelle.add_row(["Verbleibende Abwesenheit bis 25% (gesamtes Schuljahr)", f"{verbleibende_abwesenheit:.2f}%"])
+        #tabelle.add_row(["Verbleibende Abwesenheit bis 25% (gesamtes Schuljahr)", f"{verbleibende_abwesenheit:.2f}%"])
         tabelle.add_row(["Verbleibende Fehlstunden bis 25% (gesamtes Schuljahr)", f"{verbleibende_fehlstunden_gesamt:.2f} Stunden"])
         tabelle.add_row(["Verbleibende Fehltage bis 25% (gesamtes Schuljahr)", f"{verbleibende_fehltage_gesamt:.2f} Tage"])
 
