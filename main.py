@@ -1,55 +1,60 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 
-def berechne_tage_bis_heute(startdatum, enddatum):
-    # Heutiges Datum
-    heute = datetime.now().date()
+def daterange(start_date, end_date):
+    """Erzeugt ein Datum für jeden Tag zwischen start_date und end_date."""
+    for n in range(int((end_date - start_date).days) + 1):
+        yield start_date + timedelta(n)
 
-    # Tage zählen
-    tage_bis_heute = 0
+def berechne_schultage_bis_heute(startdatum, enddatum, ferientage):
+    # Schulwochentage zählen (Montag bis Freitag), Ferien ausschließen
+    schultage = 0
     aktuelles_datum = startdatum
-    while aktuelles_datum <= heute and aktuelles_datum <= enddatum:
-        if aktuelles_datum.weekday() < 5:  # Montag bis Freitag
-            tage_bis_heute += 1
+    while aktuelles_datum <= enddatum and aktuelles_datum <= datetime.now().date():
+        if aktuelles_datum.weekday() < 5 and aktuelles_datum not in ferientage:  # Montag bis Freitag ausschließlich Ferien
+            schultage += 1
         aktuelles_datum += timedelta(days=1)
+    return schultage
 
-    return tage_bis_heute
-
-def berechne_abwesenheit_bis_heute(fehlstunden, tage_bis_heute, stunden_pro_tag):
+def berechne_abwesenheit_bis_heute(fehlstunden, schultage_bis_heute, stunden_pro_tag):
     # Gesamtstunden bis heute
-    gesamtstunden_bis_heute = tage_bis_heute * stunden_pro_tag
+    gesamtstunden_bis_heute = schultage_bis_heute * stunden_pro_tag
 
     # Abwesenheitsrate berechnen
     abwesenheitsrate = (fehlstunden / gesamtstunden_bis_heute) * 100 if gesamtstunden_bis_heute > 0 else 0
 
     return abwesenheitsrate
 
-def hauptprogramm():
-    # Schuljahr Informationen
-    startdatum = datetime(2023, 9, 5).date()
-    enddatum = datetime(2024, 6, 14).date()
+# Ferienzeiträume und einzelne Ferientage
+ferienzeitraeume = [
+    (date(2023, 10, 28), date(2023, 11, 5)),
+    (date(2023, 12, 23), date(2024, 1, 7)),
+    (date(2024, 2, 10), date(2024, 2, 18)),
+    (date(2024, 3, 28), date(2024, 4, 2)),
+    (date(2024, 4, 25), date(2024, 4, 28)),
+]
+einzelne_ferientage = [date(2023, 12, 8), date(2024, 5, 1), date(2024, 5, 20)]
 
-    # Durchschnittliche Stunden pro Tag (Annahme: gleiche Verteilung über die Woche)
-    stunden_pro_wochentag = {"Montag": 8, "Dienstag": 6, "Mittwoch": 9, "Donnerstag": 6, "Freitag": 6}
-    durchschnitt_stunden_pro_tag = sum(stunden_pro_wochentag.values()) / len(stunden_pro_wochentag)
+# Ferien in einzelne Tage umwandeln
+ferientage = set(einzelne_ferientage)
+for start, ende in ferienzeitraeume:
+    for single_date in daterange(start, ende):
+        ferientage.add(single_date)
 
-    # Tage bis heute berechnen
-    tage_bis_heute = berechne_tage_bis_heute(startdatum, enddatum)
+# Schuljahr Informationen
+startdatum = date(2023, 9, 5)
+enddatum = date(2024, 6, 14)
 
-    # Eingabe der Fehlstunden
-    try:
-        fehlstunden = int(input("Bitte geben Sie die Anzahl Ihrer Fehlstunden ein: "))
-        if fehlstunden < 0:
-            raise ValueError("Die Anzahl der Fehlstunden kann nicht negativ sein.")
-    except ValueError as e:
-        print("Ungültige Eingabe. Bitte geben Sie eine gültige Zahl ein.")
-        return
+# Durchschnittliche Stunden pro Schultag (Annahme: gleiche Verteilung über die Woche)
+stunden_pro_wochentag = {"Montag": 8, "Dienstag": 6, "Mittwoch": 9, "Donnerstag": 6, "Freitag": 6}
+durchschnitt_stunden_pro_tag = sum(stunden_pro_wochentag.values()) / len(stunden_pro_wochentag)
 
-    # Abwesenheitsrate berechnen
-    abwesenheitsrate = berechne_abwesenheit_bis_heute(fehlstunden, tage_bis_heute, durchschnitt_stunden_pro_tag)
+# Anzahl der Schultage bis heute berechnen, unter Berücksichtigung der Ferien
+schultage_bis_heute = berechne_schultage_bis_heute(startdatum, enddatum, ferientage)
 
-    # Ergebnisse ausgeben
-    print(f"Anzahl der Unterrichtstage bis heute: {tage_bis_heute}")
-    print(f"Abwesenheitsrate: {abwesenheitsrate:.2f}%")
+# Beispiel: 74 Fehlstunden
+fehlstunden = 81 # Beispielwert
+abwesenheitsrate = berechne_abwesenheit_bis_heute(fehlstunden, schultage_bis_heute, durchschnitt_stunden_pro_tag)
 
-# Hauptprogramm ausführen
-hauptprogramm()
+#Ergebnisse ausgeben
+print(f"Anzahl der Schultage bis heute: {schultage_bis_heute}")
+print(f"Abwesenheitsrate: {abwesenheitsrate:.2f}%")
