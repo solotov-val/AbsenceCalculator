@@ -22,7 +22,9 @@ Führen Sie das Skript in einem Python-fähigen Terminal oder einer IDE aus. Geb
 
 ## Beispiel
 Geben Sie die Anzahl der Fehlstunden ein (oder 'exit' zum Beenden): 10
+
 Ausgabe:
+```
 +---------------------------------------------------------+
 | Kategorie                                 | Wert        |
 +---------------------------------------------------------+
@@ -31,10 +33,11 @@ Ausgabe:
 | Verbleibende Fehlstunden bis 25% (gesamt) | 150 Stunden |
 | Verbleibende Fehltage bis 25% (gesamt)    | 18.75 Tage  |
 +---------------------------------------------------------+
+````
 
 
 ## Lizenz
-[MIT License](LICENSE)
+Dieses Projekt ist unter der [MIT License](LICENSE) lizenziert.
 
 ## Kontakt
 Für Fragen und Anregungen können Sie [hier](https://github.com/solotov-val/AbsenceCalculator/issues) ein Issue eröffnen.
